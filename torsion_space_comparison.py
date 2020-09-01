@@ -1,3 +1,12 @@
+# @Author: Tristan Croll <tic20>
+# @Date:   29-Nov-2018
+# @Email:  tic20@cam.ac.uk
+# @Last modified by:   tic20
+# @Last modified time: 15-May-2019
+# @License: Free for non-commercial use (see license.pdf)
+# @Copyright: 2017-2018 Tristan Croll
+
+
 
 from math import radians, pi
 import os
@@ -46,6 +55,159 @@ refinement_starting_models = {
     'R1016': ('T1016-D1', 'T1016TS368_1-D1.pdb'),
 }
 
+hard_targets = ("T0954-D1", "T0957s1-D2", "T0959-D1", "T0960-D3", "T0963-D3", "T0964-D1", "T0965-D1", "T0966-D1", "T0979-D1", "T0981-D1", "T0981-D4", "T0981-D5", "T0985-D1", "T0999-D2", "T1009-D1", "T1011-D1", "T1015s2-D1", "T1021s1-D1", "T1021s2-D1", "T1022s1-D2", "T1022s2-D1")
+easy_targets=("T0960-D5", "T0961-D1", "T0963-D5", "T0973-D1", "T0974s1-D1", "T0976-D1", "T0976-D2", "T0977-D1", "T0977-D2", "T0983-D1", "T0984-D1", "T0984-D2", "T0993s1-D1", "T0993s2-D1", "T0995-D1", "T0996-D1", "T0996-D2", "T0996-D3", "T0996-D4", "T0996-D5", "T0996-D6", "T0996-D7", "T0999-D3", "T0999-D4", "T0999-D5", "T1002-D1", "T1002-D2", "T1002-D3", "T1003-D1", "T1004-D1", "T1004-D2", "T1006-D1", "T1013-D1", "T1014-D1", "T1014-D2", "T1016-D1", "T1017s1-D1", "T1018-D1", "T1019s2-D1", "T1020-D1")
+
+all_tbm_targets = hard_targets+easy_targets
+
+tbm_gid_to_group_name = {
+    322: "Zhang",
+    43: "A7D",
+    89: "MULTICOM",
+    261: "Zhang-Server",
+    460: "McGuffin",
+    145: "QUARK",
+    222: "Seok-refine",
+    274: "MUFold",
+    135: "SBROD",
+    324: "RaptorX-DeepModeller",
+    354: "wfAll-Cheng",
+    221: "RaptorX-TBM",
+    344: "Kiharalab",
+    192: "Elofsson",
+    197: "MESHI",
+    55: "VoroMQA-select",
+    86: "BAKER",
+    68: "Seok",
+    196: "Grudinin",
+    406: "Seder3mm",
+    156: "Seok-server",
+    390: "Bhattacharya",
+    243: "MULTICOM-CONSTRUCT",
+    418: "Seder3nc",
+    241: "Bhageerath-Star",
+    44: "ProQ2",
+    368: "BAKER-ROSETTASERVER",
+    71: "Seder3full",
+    441: "FALCON",
+    23: "MULTICOM-NOVEL",
+    366: "Venclovas",
+    214: "wfRosetta-ModF7",
+    208: "KIAS-Gdansk",
+    58: "MULTICOM_CLUSTER",
+    309: "Seder1",
+    246: "IntFOLD5",
+    457: "Wallner",
+    426: "AP_1",
+    117: "Jones-UCL",
+    164: "Yang-Server",
+    329: "D-Haven",
+    224: "Destini",
+    446: "slbio",
+    116: "Zhang-CEthreader",
+    281: "SHORTLE",
+    471: "CPClab",
+    149: "Zhou-SPOT-3D",
+    266: "slbio_server",
+    377: "wfRstta-Maghrabi-TQA",
+    279: "ZHOU-SPOT",
+    163: "Bates_BMM",
+    160: "CMA-align",
+    244: "Seder3hard",
+    470: "Seok-assembly",
+    337: "FALCON-TBM",
+    335: "wfRosetta-PQ2-AngQA",
+    498: "RaptorX-Contact",
+    4: "YASARA",
+    347: "MESHI-server",
+    432: "Seok-naive_assembly",
+    402: "RBO-Aleph",
+    397: "PepBuilderJ",
+    110: "Distill",
+    47: "chuo-u",
+    85: "BhageerathH-Plus",
+    312: "MUFold_server",
+    488: "Delta-Gelly-Server",
+    112: "AWSEM",
+    124: "AWSEM-Suite",
+    472: "DELClab",
+    358: "Spider",
+    431: "Laufer",
+    92: "Ricardo",
+    492: "wf-BAKER-UNRES",
+    288: "UNRES",
+    97: "Laufer_abinitio",
+    365: "3D-JIGSAW_SL1",
+    407: "rawMSA",
+    77: "qmo",
+    351: "DL-Haven",
+    157: "GAPF_LNCC",
+    41: "FALCON-Contact",
+    122: "Forbidden",
+    7: "ACOMPMOD",
+    257: "NOCONTACT",
+    381: "GONGLAB-THU",
+    152: "PconsC4",
+    389: "UpsideUChicago",
+    282: "PRAYOG",
+    250: "Meilerlab",
+    473: "Maurice",
+    497: "GaussDCA",
+    414: "BCLMeilerLab",
+    401: "InnoUNRES",
+    458: "FOLDNET",
+    348: "HMSCasper-Refiner",
+    380: "Laufer_100",
+    378: "Cao-server",
+    476: "Sun_Tsinghua",
+}
+
+
+refinement_gid_to_group_name = {
+    -1:     'Starting model',
+    4:      'YASARA',
+    68:     'Seok',
+    86:     'BAKER',
+    102:    'Bhattacharya-Server',
+    112:    'AWSEM',
+    117:    'Jones-UCL',
+    122:    'Forbidden',
+    156:    'Seok-server',
+    174:    'Zhang-Refinement',
+    190:    'DC_refine',
+    195:    'Seminoles',
+    196:    'Grudinin',
+    197:    'MESHI',
+    208:    'KIAS-Gdansk',
+    217:    'Boniecki_pred',
+    270:    'Huang',
+    281:    'SHORTLE',
+    288:    'UNRES',
+    312:    'MUFold_server',
+    328:    'Kiharalab_RF2',
+    329:    'D-Haven',
+    344:    'Kiharalab',
+    356:    'FEIGLAB',
+    358:    'Spider',
+    359:    '3DCNN',
+    390:    'Bhattacharya',
+    425:    'BAKER-AUTOREFINE',
+    431:    'Laufer',
+    433:    'AIR',
+    457:    'Wallner',
+    460:    'McGuffin',
+    492:    'wf-BAKER-UNRES'
+}
+
+def get_group_names(gids, refinement=False):
+    if refinement:
+        name_dict = refinement_gid_to_group_name
+    else:
+        name_dict = tbm_gid_to_group_name
+    names = [name_dict.get(gid, str(gid)) for gid in gids]
+    return names
+
+
 
 TWISTED_THRESHOLD = radians(30)
 
@@ -53,6 +215,7 @@ _target_dir = '/home/tic20/casp/predictioncenter.org/casp13/assessors/TARGETS'
 _prediction_dir = '/home/tic20/casp/predictioncenter.org/casp13/assessors/TARBALLS/predictions_trimmed_to_domains'
 _refinement_dir = '/home/tic20/casp/predictioncenter.org/casp13/assessors/TARBALLS/predictions'
 _casp_analysis_dir = '/home/tic20/casp/predictioncenter.org/casp13/assessors/TARBALLS/results/tables'
+
 
 def load_target(session, name):
     from chimerax.core.commands import open
@@ -210,7 +373,7 @@ def raw_score(db, names, directions, weights, ranges, mode = 'all', ranged=True)
         model_ids = db['Model']
         model_mask = numpy.array([True if '_1' in mid else False for mid in model_ids])
         model_mask[db['GR#']==-1] = True
-        return unique_gids, result[model_mask] * coverage[model_mask]
+        return db['GR#'][model_mask], result[model_mask] * coverage[model_mask]
     elif mode == 'best only':
         final_result = numpy.empty(len(unique_gids))
         for i, gid in enumerate(unique_gids):
@@ -235,6 +398,7 @@ def weighted_z_score(db, names, directions, weights, adjusted=True,
     gid_mask = (gids != -1)
     _, unique_indices = numpy.unique(gids, return_index=True)
     unique_gids = gids[numpy.sort(unique_indices)]
+
     for name, d, w in zip(names, directions, weights):
         data = db[name]*d
         fmask = numpy.logical_and(gid_mask, numpy.isfinite(data))
@@ -251,21 +415,27 @@ def weighted_z_score(db, names, directions, weights, adjusted=True,
             z_score[fmask] = zscore(data[fmask])
         z_scores.append(z_score*w)
     result = sum(z_scores) / sum(weights)
-    if mode == 'all':
+    if mode in ('all', 'model_1_only'):
         return gids, result*coverage
+
     final_result = numpy.empty(len(unique_gids))
-    if mode == 'model 1 only':
-        model_ids = db['Model']
-        model_mask = numpy.array([True if '_1' in mid else False for mid in model_ids ])
-        model_mask[db['GR#']==-1] = True
-        final_result[:] = result[model_mask] * coverage[model_mask]
-    elif mode == 'best only':
+    # if mode == 'model 1 only':
+    #     model_ids = db['Model']
+    #     model_mask = numpy.array([True if '_1' in mid else False for mid in model_ids ])
+    #     model_mask[db['GR#']==-1] = True
+    #     final_result = numpy.empty(sum(model_mask))
+    #     try:
+    #         final_result[:] = result[model_mask] * coverage[model_mask]
+    #     except:
+    #         print(db['Model'][0], numpy.sort(unique_gids), numpy.sort(db['GR#'][model_mask]))
+    #         raise
+    #     return db['GR#'][model_mask], final_result
+    if mode == 'best only':
         for i, gid in enumerate(unique_gids):
             gmask = (gids==gid)
             final_result[i] = numpy.max(result[gmask] * coverage[gmask])
     final_result[numpy.isnan(final_result)] = 0
     return unique_gids, final_result
-
 
 def zero():
     return 0
@@ -323,7 +493,8 @@ def single_criterion_fn(label, direction=1, max_val=1):
     def f(db, z_scores=True, mode='all', plot=True):
         gids, scores = _scoring_base(db, [label], [direction], [1], [max_val],
             z_scores=z_scores, mode=mode, ranged=False)
-        return rank_scores(gids, scores, plot)
+        return gids, scores
+        # return rank_scores(gids, scores, plot)
     if direction < 0:
         f.__name__='minus_{}'.format(label)
     else:
@@ -337,7 +508,8 @@ def default_tbm_ranking(db, z_scores=True, mode='all', plot=True):
     ranges=[100, 1, 1, 100, 100]
     gids, scores = _scoring_base(db, names, directions, weights, ranges,
                            z_scores=z_scores, mode=mode)
-    return rank_scores(gids, scores, plot)
+    return gids, scores
+    #return rank_scores(gids, scores, plot)
 
 def default_tbm_minus_qse_ranking(db, z_scores=True, mode='all', plot=True):
     names=['GDT_HA', 'LDDT', 'CAD_AA', 'SphGr']
@@ -359,10 +531,37 @@ def default_refinement_ranking(db, z_scores=True, mode='all', plot=True):
     return rank_scores(gids, scores, plot)
 
 def geom_quality_ranking(db, z_scores=True, mode='all', plot=True):
+    names=['GDT_HA','LDDT', 'CAD_AA', 'SphGr', 'MolPrb_clash', 'Model Average Backbone Error', 'Model Average Sidechain Error', 'QSE']
+    directions=[1,1,1,1,-1,-1,-1,1]
+    weights=[1/4,1/16,1/16,1/16,1/8,1/8,1/16,1/4]
+    ranges=[100, 1, 1, 100, 20, 45, 45, 100]
+    gids, scores = _scoring_base(db, names, directions, weights, ranges,
+                           z_scores=z_scores, mode=mode)
+    return rank_scores(gids, scores, plot)
+
+def geom_quality_ranking_new(db, z_scores=True, mode='all', plot=True):
+    names=['GDT_HA','LDDT', 'CAD_AA', 'SphGr', 'MolPrb_clash', 'Model Backbone Score', 'Model Sidechain Score', 'QSE']
+    directions=[1,1,1,1,-1,-1,-1,1]
+    weights=[1/4,1/16,1/16,1/16,1/8,1/8,1/16,1/4]
+    ranges=[100, 1, 1, 100, 20, 1, 1, 100]
+    gids, scores = _scoring_base(db, names, directions, weights, ranges,
+                           z_scores=z_scores, mode=mode)
+    return rank_scores(gids, scores, plot)
+
+def geom_quality__minus_qse_ranking(db, z_scores=True, mode='all', plot=True):
     names=['GDT_HA','LDDT', 'CAD_AA', 'SphGr', 'MolPrb_clash', 'Model Average Backbone Error', 'Model Average Sidechain Error']
     directions=[1,1,1,1,-1,-1,-1]
     weights=[1/3,1/12,1/12,1/12,1/6,1/6,1/12]
     ranges=[100, 1, 1, 100, 20, 45, 45]
+    gids, scores = _scoring_base(db, names, directions, weights, ranges,
+                           z_scores=z_scores, mode=mode)
+    return rank_scores(gids, scores, plot)
+
+def geom_quality__minus_qse_ranking_new(db, z_scores=True, mode='all', plot=True):
+    names=['GDT_HA','LDDT', 'CAD_AA', 'SphGr', 'MolPrb_clash', 'Model Backbone Score', 'Model Sidechain Score']
+    directions=[1,1,1,1,-1,-1,-1]
+    weights=[1/3,1/12,1/12,1/12,1/6,1/6,1/12]
+    ranges=[100, 1, 1, 100, 20, 1, 1]
     gids, scores = _scoring_base(db, names, directions, weights, ranges,
                            z_scores=z_scores, mode=mode)
     return rank_scores(gids, scores, plot)
@@ -375,6 +574,16 @@ def pure_torsion_ranking(db, z_scores=True, mode='all', plot=True):
     gids, scores = _scoring_base(db, names, directions, weights, ranges,
                            mode=mode, z_scores=z_scores)
     return rank_scores(gids, scores, plot)
+
+def pure_torsion_ranking_new(db, z_scores=True, mode='all', plot=True):
+    names=['Model Backbone Score', 'Model Sidechain Score']
+    directions=[-1,-1]
+    weights=[2/3,1/3]
+    ranges=[1, 1]
+    gids, scores = _scoring_base(db, names, directions, weights, ranges,
+                           mode=mode, z_scores=z_scores)
+    return rank_scores(gids, scores, plot)
+
 
 def torsion_plus_clash_ranking(db, z_scores=True, mode='all', plot=True):
     names=['Model Average Backbone Error', 'Model Average Sidechain Error', 'MolPrb_clash']
@@ -410,18 +619,21 @@ def rmsd_ca(db, z_scores=True, mode='all', plot=True):
     return rank_scores(gids, scores, plot)
 
 def refinement_improvements_over_starting_model(targets, scoring_fn,
-        model_1_only=False, best_only=False, plot=True):
+        model_1_only=False, best_only=False, plot=True, z_scores=True,
+        group_names=True, num_top_groups=None):
     from collections import defaultdict
     import numpy
     gid_to_num_improved = defaultdict(zero)
     gid_to_scores = defaultdict(list)
     for t in targets:
         gids, scores = refinement_improvement(t, scoring_fn,
-            model_1_only=model_1_only, best_only=best_only, plot=False)
+            model_1_only=model_1_only, best_only=best_only, plot=False,
+            z_scores=z_scores)
         for gid, score in zip(gids, scores):
             if score > 0:
                 gid_to_num_improved[gid] += 1
-            gid_to_scores[gid].append(score)
+            if numpy.isfinite(score):
+                gid_to_scores[gid].append(score)
     final_gids = numpy.array(list(gid_to_scores.keys()))
     final_scores = numpy.zeros(len(final_gids))
     for i, gid in enumerate(final_gids):
@@ -430,6 +642,8 @@ def refinement_improvements_over_starting_model(targets, scoring_fn,
             avg = 0
         else:
             avg = sum(scores)
+        # if gid in (68, 156):
+        #     print('Output {}: {}'.format(gid, avg)) #','.join('{:.2f}'.format(score) for score in scores)))
         final_scores[i] = avg
 
     final_counts = []
@@ -443,25 +657,36 @@ def refinement_improvements_over_starting_model(targets, scoring_fn,
     total_z_scores = (final_gids[final_score_order], final_scores[final_score_order])
     improved_counts = (final_gids[final_count_order], final_counts[final_count_order])
 
+    if not num_top_groups:
+        num_top_groups = len(final_gids)
+
     if plot:
         from matplotlib import pyplot as plt
         fig, axs = plt.subplots(2)
-        fig.suptitle('Refinement improvements over starting model by {}'.format(scoring_fn.__name__))
-        x = numpy.arange(len(final_gids))
+        # fig.suptitle('Refinement improvements over starting model by {}'.format(scoring_fn.__name__))
+        x = numpy.arange(num_top_groups)
         ax = axs[0]
-        ax.bar(x, total_z_scores[1])
+        ax.bar(x, total_z_scores[1][:num_top_groups])
         ax.set_xticks(x)
-        ax.set_xticklabels(total_z_scores[0], rotation=45)#, fontsize='small')
+        if group_names:
+            labels = get_group_names(total_z_scores[0][:num_top_groups], refinement=True)
+        else:
+            labels = total_z_scores[0][:num_top_groups]
+        ax.set_xticklabels(labels, rotation=90)#, fontsize='small')
         ax.set_ylabel('Σ(ΔZ)')
 
         ax = axs[1]
-        ax.bar(x, improved_counts[1]/len(targets)*100)
+        ax.bar(x, improved_counts[1][:num_top_groups]/len(targets)*100)
         ax.set_xticks(x)
-        ax.set_xticklabels(improved_counts[0], rotation=45)#, fontsize='small')
+        if group_names:
+            labels = get_group_names(improved_counts[0][:num_top_groups], refinement=True)
+        else:
+            labels = improved_counts[0][:num_top_groups]
+        ax.set_xticklabels(labels, rotation=90)#, fontsize='small')
         ax.set_ylabel('Improved models (%)')
-
+        plt.tight_layout()
         plt.show()
-
+        return plt
     return (total_z_scores, improved_counts)
 
 
@@ -469,12 +694,15 @@ def refinement_improvement(target, scoring_fn, model_1_only=False, best_only=Fal
         z_scores=False):
     mode = choose_mode(model_1_only, best_only)
     import numpy
-    db = merge_with_casp_data(target, refinement=True)
+    db = merge_with_casp_data(target, refinement=True, model_1_only=model_1_only)
     gids, scores = scoring_fn(db, z_scores=z_scores, mode=mode, plot=False)
-    scores -= scores[gids==-1]
+    # print('Reference score: {}'.format(scores[gids==-1][0]))
+    # print('Input scores before correction: 68: {:.2f}; 156: {:.2f}'.format(scores[gids==68][0], scores[gids==156][0]))
+    scores -= scores[gids==-1][0]
     gid_mask = gids!=-1
     gids=gids[gid_mask]
     scores = scores[gid_mask]
+    # print('Input scores: 68: {:.2f}; 156: {:.2f}'.format(scores[gids==68][0], scores[gids==156][0]))
     if plot:
         from matplotlib import pyplot as plt
         fig = plt.figure()
@@ -530,7 +758,7 @@ def compare_refinement_improvements(target, scoring_fn_1, scoring_fn_2,
     y_scores = y_scores[order_y]
     shifts = shifts[order_y]
 
-    nan_mask = numpy.logical_and(numpy.isfinite(x_scores, numpy.isfinite(y_scores)))
+    nan_mask = numpy.logical_and(numpy.isfinite(x_scores), numpy.isfinite(y_scores))
     x_scores = x_scores[nan_mask]
     x_gids = x_gids[nan_mask]
     y_scores = y_scores[nan_mask]
@@ -682,37 +910,39 @@ def refinement_improvement_by_secondary_structure_content(session, targets, scor
     return xvals, yvals, r_value**2
 
 def refinement_before_vs_after_scores(targets, scoring_fn, num_top_groups=5,
-        reverse=False, model_1_only=False, best_only=False, plot=True):
+        target_groups=None, reverse=False, model_1_only=False,
+        best_only=False, plot=True):
     mode = choose_mode(model_1_only, best_only)
     import numpy
-    target_dict = {}
-    from collections import defaultdict
-    all_gids=set()
-    for t in targets:
-        gid_to_scores = target_dict[t] = defaultdict(list)
-        db = merge_with_casp_data(t, refinement=True)
-        gids, scores = scoring_fn(db, z_scores=True, mode=mode, plot=False)
-        for gid, score in zip(gids, scores):
-            if gid != -1:
-                gid_to_scores[gid].append(score)
-                all_gids.add(gid)
-    z_score_dict = {}
-    for gid in all_gids:
+    if target_groups is None:
+        target_dict = {}
+        from collections import defaultdict
+        all_gids=set()
+        for t in targets:
+            gid_to_scores = target_dict[t] = defaultdict(list)
+            db = merge_with_casp_data(t, refinement=True)
+            gids, scores = scoring_fn(db, z_scores=True, mode=mode, plot=False)
+            for gid, score in zip(gids, scores):
+                if gid != -1:
+                    gid_to_scores[gid].append(score)
+                    all_gids.add(gid)
+        z_score_dict = {}
+        for gid in all_gids:
+            z_scores = []
+            for g2s in target_dict.values():
+                g_scores = g2s[gid]
+                if len(g_scores) < 5:
+                    for i in range(5-len(g_scores)):
+                        g_scores.append(0)
+                z_scores.extend(g_scores)
+            z_score_dict[gid] = numpy.array(z_scores).mean()
+        gids = []
         z_scores = []
-        for g2s in target_dict.values():
-            g_scores = g2s[gid]
-            if len(g_scores) < 5:
-                for i in range(5-len(g_scores)):
-                    g_scores.append(0)
-            z_scores.extend(g_scores)
-        z_score_dict[gid] = numpy.array(z_scores).mean()
-    gids = []
-    z_scores = []
-    for gid, z_score in z_score_dict.items():
-        gids.append(gid)
-        z_scores.append(z_score)
-    sorted_gids = [gid for gid, _ in sorted(zip(gids, z_scores), key=lambda pair: pair[1], reverse=True)]
-    target_groups = sorted_gids[:num_top_groups]
+        for gid, z_score in z_score_dict.items():
+            gids.append(gid)
+            z_scores.append(z_score)
+        sorted_gids = [gid for gid, _ in sorted(zip(gids, z_scores), key=lambda pair: pair[1], reverse=not reverse)]
+        target_groups = sorted_gids[:num_top_groups]
     final_score_dict = {}
     for gid in target_groups:
         final_score_dict[gid] = { 'x': [], 'y': [], 'target': []}
@@ -787,7 +1017,6 @@ def refinement_before_vs_after_scores(targets, scoring_fn, num_top_groups=5,
 
 
 
-
 def ranking_dict(targets, scoring_fn, model_1_only=False, best_only=False, refinement=False):
     mode = choose_mode(model_1_only, best_only)
     target_rankings = dict()
@@ -800,10 +1029,11 @@ def ranking_dict(targets, scoring_fn, model_1_only=False, best_only=False, refin
     return target_rankings
 
 def meta_ranking(targets, scoring_fn, plot=True, num_groups=None,
-    model_1_only=False, best_only=False, refinement=False):
+    model_1_only=False, best_only=False, refinement=False, use_group_names=False,
+    rotation=45):
     '''
     Rank groups by their average score for all targets in the given list, using
-    the chosen scoring function. Set num_groups to a positve value to plot only
+    the chosen scoring function. Set num_groups to a positive value to plot only
     that number of leaders.
     '''
     import os
@@ -844,10 +1074,16 @@ def meta_ranking(targets, scoring_fn, plot=True, num_groups=None,
             ax.bar(x, p_gscores, color=colors)
         else:
             ax.bar(x, p_gscores)
+        if not use_group_names:
+            labels = p_gids
+        else:
+            labels = get_group_names(p_gids, refinement=refinement)
         ax.set_xticks(x)
-        ax.set_xticklabels(p_gids, rotation=45, fontsize='small')
+        ax.set_xticklabels(labels, rotation=rotation, fontsize='small')
         ax.set_ylabel(scoring_fn.__name__)
+        plt.tight_layout()
         plt.show()
+        return plt
     return gids, g_scores
 
 def per_model_rankings(gid, targets, scoring_fns, model_1_only=False,
@@ -917,7 +1153,7 @@ def ranking_shift(sorted_gids_1, sorted_gids_2):
 
 
 def compare_rankings(db, rank_fn_1, rank_fn_2, model_1_only=False, best_only=False,
-        plot=True, refinement=False):
+        plot=True, refinement=False, use_group_names=True):
     mode = choose_mode(model_1_only, best_only)
     d_gids, d_scores = rank_fn_1(db, mode=mode, plot=False)
     g_gids, g_scores = rank_fn_2(db, mode=mode, plot=False)
@@ -930,11 +1166,11 @@ def compare_rankings(db, rank_fn_1, rank_fn_2, model_1_only=False, best_only=Fal
     sorted_g_scores = g_scores[orderg]
     if plot:
         ranking_comparison_plot(sorted_d_scores, sorted_g_scores, -sorted_shifts,
-            sorted_gids, rank_fn_1.__name__, rank_fn_2.__name__)
+            sorted_gids, rank_fn_1.__name__, rank_fn_2.__name__, refinement=refinement, use_group_names=use_group_names)
 
 
 def compare_meta_rankings(targets, rank_fn_1, rank_fn_2, num_groups=None,
-    model_1_only = False, best_only=False, refinement=False):
+    model_1_only = False, best_only=False, refinement=False, use_group_names=True):
     x_gids, x_scores = meta_ranking(targets, rank_fn_1, plot=False,
         model_1_only=model_1_only, best_only=best_only, refinement=refinement)
     y_gids, y_scores = meta_ranking(targets, rank_fn_2, plot=False,
@@ -963,10 +1199,10 @@ def compare_meta_rankings(targets, rank_fn_1, rank_fn_2, num_groups=None,
         y_scores = y_scores[:num_groups]
         shifts = shifts[:num_groups]
 
-    ranking_comparison_plot(x_scores, y_scores, shifts, gids, rank_fn_1.__name__, rank_fn_2.__name__, refinement=refinement)
+    ranking_comparison_plot(x_scores, y_scores, shifts, gids, rank_fn_1.__name__, rank_fn_2.__name__, refinement=refinement, use_group_names=use_group_names)
     return (x_scores, y_scores, shifts, gids)
 
-def ranking_comparison_plot(xscores, yscores, shifts, gids, x_fn_name, y_fn_name, refinement=False):
+def ranking_comparison_plot(xscores, yscores, shifts, gids, x_fn_name, y_fn_name, refinement=False, use_group_names=True):
     import numpy
     from matplotlib import pyplot as plt
     fig = plt.figure()
@@ -979,6 +1215,12 @@ def ranking_comparison_plot(xscores, yscores, shifts, gids, x_fn_name, y_fn_name
     if refinement:
         s_mask = gids==-1
         ax.scatter(xscores[s_mask], yscores[s_mask], c='red', s=49)
+
+    if use_group_names:
+        if refinement:
+            name_dict = refinement_gid_to_group_name
+        else:
+            name_dict = tbm_gid_to_group_name
 
     annot = ax.annotate("", xy=(0,0), xytext=(20,20), textcoords='offset points',
                 bbox=dict(boxstyle='round', fc='w'),
@@ -995,7 +1237,11 @@ def ranking_comparison_plot(xscores, yscores, shifts, gids, x_fn_name, y_fn_name
             return False
         x = numpy.mean(xs)
         y = numpy.mean(ys)
-        names = gids[indices]
+        lgids = gids[indices]
+        if use_group_names:
+            names = get_group_names(lgids, refinement=refinement)
+        else:
+            names = lgids
         text = ', '.join([str(name) for name in names])
         annot.set_text(text)
         annot.xy = x, y
@@ -1268,7 +1514,6 @@ def find_and_trim_matching_templates(session, target, templates, model_to_parent
             except:
                 print ('Failed on template {} before alignment'.format(t))
                 return t
-                pass
             continue
         aligned_atoms = best_result[0]
         if len(aligned_atoms) < len(target.residues)*match_threshold:
@@ -1280,7 +1525,6 @@ def find_and_trim_matching_templates(session, target, templates, model_to_parent
             except:
                 print ('Failed on template {} after pruning'.format(t))
                 return t
-                pass
         # Delete everything in the template more than 20 residues outside the aligned region
         all_aligned_atoms = overall_result[0]
         aligned_residue_numbers = all_aligned_atoms.residues.numbers
@@ -1293,7 +1537,11 @@ def find_and_trim_matching_templates(session, target, templates, model_to_parent
         t.alignment_to_target = overall_result
         cxsave.save(session, os.path.join(aligned_template_dirname, t.name)+'.pdb', models=[t], rel_model=target)
 
-def align(session, target, model, cutoff_distance=3):
+logfile = open('align.log', 'wt')
+
+def align(session, target, model, cutoff_distance=3, logfile=logfile):
+    logfile.write('Aligning {} to {}\n'.format(model.name, target.name))
+    logfile.flush()
     from chimerax.match_maker.match import match, defaults
     result = match(session, defaults['chain_pairing'], (target, [model]),
         defaults['matrix'], defaults['alignment_algorithm'],
@@ -1340,6 +1588,39 @@ def sidechain_buried_score(residue):
     return score
 
 
+def chord_formula(angle_deltas):
+    from numpy import cos
+    return (1-cos(angle_deltas))/2
+
+def backbone_score(phi_deltas, psi_deltas, chi_deltas):
+    import numpy
+    combined = numpy.column_stack([chord_formula(d) for d in (phi_deltas, psi_deltas, chi_deltas)])
+    return numpy.nanmean(combined, axis=1)
+
+def sidechain_score(burial_scores, n_chis, chi1_deltas, chi2_deltas, chi1_cutoff = radians(30)):
+    import numpy
+    no_chi1 = numpy.isnan(chi1_deltas)
+    no_chi2 = numpy.isnan(chi2_deltas)
+    scores = numpy.zeros(chi1_deltas.shape)
+    # Sidechains with no rotamers do not contribute to the score
+    scores[n_chis==0] = numpy.nan
+    # If a rotameric sidechain is present in the target but not in the model, it
+    # gets the maximum possible score
+    scores[numpy.logical_and(n_chis>0, no_chi1)] = 1
+    chi1_scores = (1+numpy.cos(chi1_deltas))/2
+    chi2_scores = (1+numpy.cos(chi2_deltas))/2
+    single_chi_filter = numpy.logical_and(~no_chi1, no_chi2)
+    two_chi_filter = numpy.logical_and(~no_chi1, ~no_chi2)
+
+    # print('Scores: {}\nBurial_scores: {}\nChi1_scores: {}'.format(scores, burial_scores, chi1_scores))
+    scores[single_chi_filter] = (burial_scores[single_chi_filter] *
+        (1-chi1_scores[single_chi_filter]))
+
+    scores[two_chi_filter] = (burial_scores[two_chi_filter] *
+        (1-2/3*chi1_scores[two_chi_filter]
+          - 1/3 * numpy.exp(-(chi1_deltas[two_chi_filter]/chi1_cutoff)**2)
+                * chi2_scores[two_chi_filter]))
+    return scores
 
 
 def compare_torsions(session, target, decoy):
@@ -1391,8 +1672,21 @@ def compare_torsions(session, target, decoy):
     sidechain_mean_error = numpy.empty(len(t_res))
     twists = numpy.zeros(len(t_res), numpy.bool)
     cis_trans_flips = numpy.zeros(len(t_res), numpy.bool)
+    target_num_chi = numpy.zeros(len(t_res), int)
+    deltas = {
+    'phi': numpy.ones(len(t_res))*numpy.nan,
+    'psi': numpy.ones(len(t_res))*numpy.nan,
+    'omega': numpy.ones(len(t_res))*numpy.nan,
+    'chi1': numpy.ones(len(t_res))*numpy.nan,
+    'chi2': numpy.ones(len(t_res))*numpy.nan,
+    'chi3': numpy.ones(len(t_res))*numpy.nan,
+    'chi4': numpy.ones(len(t_res))*numpy.nan
+    }
+    sidechain_burial_scores = numpy.ones(len(t_res))*numpy.nan
+
     for i, (tr, dr) in enumerate(zip(t_res, d_res)):
         nchi = protein_dihedral_dict[tr.name]['nchi']
+        target_num_chi[i] = nchi
         symm = protein_dihedral_dict[tr.name]['symm']
         t_name = tr.name
         d_name = dr.name
@@ -1420,7 +1714,9 @@ def compare_torsions(session, target, decoy):
                 # chain breaks)
                 abs_b_mean += 0
             else:
-                abs_b_mean += abs(minimum_difference(td.angle, dd.angle))
+                diff = minimum_difference(td.angle, dd.angle)
+                deltas[bd_name][i] = diff
+                abs_b_mean += abs(diff)
         abs_b_mean = abs_b_mean/3
         backbone_mean_error[i] = abs_b_mean
 
@@ -1429,6 +1725,7 @@ def compare_torsions(session, target, decoy):
 
         # If a sidechain has no rotamers, it doesn't contribute to the score
         buried_score = sidechain_buried_score(tr)
+        sidechain_burial_scores[i] = buried_score
 
         if nchi==0:
             sidechain_mean_error[i] = numpy.nan
@@ -1461,12 +1758,14 @@ def compare_torsions(session, target, decoy):
                             td_angle += pi
                         if dd_angle < 0:
                             dd_angle += pi
-                    abs_s_mean += abs(minimum_difference(td_angle, dd_angle)) * weight
+                    diff = minimum_difference(td_angle, dd_angle)
+                    deltas[sd_name][i] = diff
+                    abs_s_mean += abs(diff) * weight
         if sum_weights > 0:
             abs_s_mean = abs_s_mean/sum_weights
+            sidechain_mean_error[i]=abs_s_mean*buried_score
         else:
-            abs_s_mean = 0
-        sidechain_mean_error[i]=abs_s_mean*buried_score
+            sidechain_mean_error[i] = numpy.nan
     backbone_mean_error = numpy.degrees(backbone_mean_error)
     sidechain_mean_error = numpy.degrees(sidechain_mean_error)
     existing_sidechain_mask = numpy.logical_not(numpy.isnan(sidechain_mean_error))
@@ -1480,6 +1779,9 @@ def compare_torsions(session, target, decoy):
         'Twisted peptide bonds': twists,
         'Peptide cis/trans flips': cis_trans_flips,
         'Aligned residues': (t_res, d_res),
+        'Torsion deltas': deltas,
+        'Backbone score': backbone_score(deltas['phi'], deltas['psi'], deltas['omega']),
+        'Sidechain score': sidechain_score(sidechain_burial_scores, target_num_chi, deltas['chi1'], deltas['chi2'])
         }
     return results
 
@@ -1504,6 +1806,7 @@ def model_vs_target(session, target, model, template=None, plot=True):
     else:
         template_vs_target = None
         template_name = "N/A"
+    print('Model: {} Target: {}'.format(model.name, target.name))
     model_vs_target = compare_torsions(session, target, model)
     if model_vs_target is None:
         return None
@@ -1556,8 +1859,10 @@ def process_directories(session, paths, reprocess=False):
             os.remove(pflag[0])
         print('Processing {}'.format(os.path.basename(p)), flush=True)
         process_directory(session, p)
+        session.models.close(session.models.list())
 
 def process_directory(session, full_path):
+    print('Processing {}'.format(full_path))
     import os
     from matplotlib import pyplot as plt
     import gc
@@ -1585,13 +1890,23 @@ def process_directory(session, full_path):
             if result is None:
                 session.models.close([m])
                 continue
+
             fig, t_vs_t, m_vs_t = result
+
+            delta_dict = {}
+            delta_dict['Model'] = {key: vals.tolist() for key, vals in m_vs_t['Torsion deltas'].items()}
+            if parent is not None:
+                delta_dict['Template'] = {key: vals.tolist() for key, vals in t_vs_t['Torsion deltas'].items()}
+            import json
+            with open(os.path.join(full_path, mfile+'torsion_deltas.json'), 'wt') as jsonfile:
+                json.dump(delta_dict, jsonfile)
+
             model_name = os.path.splitext(m.name)[0]
             if parent is None:
                 parent_name = "none"
             else:
                 parent_name = parent.name
-            fig.savefig(model_name+'_vs_'+parent_name+'_torsion_comparison.png')
+            fig.savefig(model_name+'_vs_'+parent_name+'_torsion_comparison_new.png')
             fig.clf()
             plt.close(fig)
             gc.collect()
@@ -1653,19 +1968,26 @@ def process_refinement_directory(session, full_path):
 
 
 def write_outfile_header(output_file):
-    header_entries = ['Model Name', 'Model Coverage', 'Model Average Backbone Error',
-        'Model Twisted Peptide Count', 'Model Twisted Peptide Frac',
-        'Model cis/trans Flips', 'Model cis/trans Flip Frac',
-        'Model Average Sidechain Error', 'Template Name', 'Template Coverage',
-        'Template Average Backbone Error', 'Template Twisted Peptide Count',
-        'Template Twisted Peptide Frac', 'Template cis/trans Flips',
-        'Template cis/trans Flip Frac', 'Template Average Sidechain Error']
+    base_entries = ['Name', 'Coverage', 'Average Backbone Error', 'Backbone Score',
+        'Twisted Peptide Count', 'Twisted Peptide Frac', 'cis/trans Flips',
+        'cis/trans Flip Frac', 'Average Sidechain Error', 'Sidechain Score']
+
+    header_entries = (['Model ' + e for e in base_entries] +
+                     ['Template ' + e for e in base_entries])
+    # header_entries = ['Model Name', 'Model Coverage', 'Model Average Backbone Error',
+    #     'Model Twisted Peptide Count', 'Model Twisted Peptide Frac',
+    #     'Model cis/trans Flips', 'Model cis/trans Flip Frac',
+    #     'Model Average Sidechain Error', 'Template Name', 'Template Coverage',
+    #     'Template Average Backbone Error', 'Template Twisted Peptide Count',
+    #     'Template Twisted Peptide Frac', 'Template cis/trans Flips',
+    #     'Template cis/trans Flip Frac', 'Template Average Sidechain Error']
     output_file.write(','.join(header_entries)+'\n')
 
 def append_comparison_to_file(outfile, model_name, model_result, template_name, template_result):
     '''
     Append results to a comma-separated text file
     '''
+    import numpy
     line_entry = []
     line_entry.append(model_name) # Model Name
     target_res, model_res = model_result['Aligned residues']
@@ -1673,6 +1995,7 @@ def append_comparison_to_file(outfile, model_name, model_result, template_name, 
     model = model_res.unique_structures[0]
     line_entry.append('{:0.3f}'.format(len(target_res)/len(target.residues))) # Model Coverage
     line_entry.append('{:0.3f}'.format(model_result['Overall backbone angle error'])) # Model Average Backbone Error
+    line_entry.append('{:0.3f}'.format(numpy.nanmean(model_result['Backbone score']))) # Chord-based score on phi/psi/omega
     model_twisted_peptide_count = sum(model_result['Twisted peptide bonds'])
     line_entry.append(str(model_twisted_peptide_count)) # Model Twisted Peptide Count
     line_entry.append('{:.3f}'.format(model_twisted_peptide_count/len(model.residues))) # Frac
@@ -1680,12 +2003,14 @@ def append_comparison_to_file(outfile, model_name, model_result, template_name, 
     line_entry.append(str(model_cis_trans_flips)) # Model cis/trans Flips
     line_entry.append('{:.3f}'.format(model_cis_trans_flips/len(model.residues))) # Frac
     line_entry.append('{:.3f}'.format(model_result['Overall weighted chi angle error'])) # Model Average Sidechain Error
+    line_entry.append('{:.3f}'.format(numpy.nanmean(model_result['Sidechain score']))) # Chord-based score on chi1/chi2
     if template_result is not None:
         line_entry.append(template_name) # Template Name
         target_res, template_res = template_result['Aligned residues']
         template = template_res.unique_structures[0]
         line_entry.append('{:0.3f}'.format(len(target_res)/len(target.residues))) # Template Coverage
         line_entry.append('{:0.3f}'.format(template_result['Overall backbone angle error'])) # Template Average Backbone Error
+        line_entry.append('{:0.3f}'.format(numpy.nanmean(template_result['Backbone score']))) # Chord-based score on phi/psi/omega
         template_twisted_peptide_count = sum(template_result['Twisted peptide bonds'])
         line_entry.append(str(template_twisted_peptide_count)) # Template Twisted Peptide Count
         line_entry.append('{:.3f}'.format(template_twisted_peptide_count/len(template.residues))) # Frac
@@ -1693,35 +2018,45 @@ def append_comparison_to_file(outfile, model_name, model_result, template_name, 
         line_entry.append(str(template_cis_trans_flips)) # Template cis/trans Flips
         line_entry.append('{:.3f}'.format(template_cis_trans_flips/len(template.residues))) # Frac
         line_entry.append('{:.3f}'.format(template_result['Overall weighted chi angle error'])) # Template Average Sidechain Error
+        line_entry.append('{:.3f}'.format(numpy.nanmean(template_result['Sidechain score']))) # Chord-based score on chi1/chi2
     else:
-        line_entry.extend(['N/A']*8)
+        line_entry.extend(['N/A']*10)
     outfile.write(','.join(line_entry)+'\n')
 
 
-def plot_comparison(name, model_name, model_result, template_name, template_result):
+def plot_comparison(name, model_name, model_result, template_name, template_result, fig=None):
     from matplotlib import pyplot as plt
     from matplotlib import lines as mlines
+    import numpy
 
     fig, (ax1, ax1_delta, ax2, ax2_delta) = plt.subplots(4,1, figsize=(10,8))
     fig.suptitle(name)
     res1 = model_result['Target residue numbers']
-    br1 = model_result['Backbone angle error']
-    sr1 = model_result['Weighted chi angle error']
+    br1 = model_result['Backbone score']
+    sr1 = model_result['Sidechain score']
+    # br1 = model_result['Backbone angle error']
+    # sr1 = model_result['Weighted chi angle error']
     tw1 = model_result['Twisted peptide bonds']
     ct1 = model_result['Peptide cis/trans flips']
     m_ca_distances = model_result['CA-CA distances']
-    m_bb_mean = model_result['Overall backbone angle error']
-    m_sc_mean = model_result['Overall weighted chi angle error']
+    m_bb_mean = numpy.nanmean(br1)
+    m_sc_mean = numpy.nanmean(sr1)
+    # m_bb_mean = model_result['Overall backbone angle error']
+    # m_sc_mean = model_result['Overall weighted chi angle error']
 
     if template_result is not None:
         res2 = template_result['Target residue numbers']
-        br2 = template_result['Backbone angle error']
-        sr2 = template_result['Weighted chi angle error']
+        br2 = template_result['Backbone score']
+        sr2 = template_result['Sidechain score']
+        # br2 = template_result['Backbone angle error']
+        # sr2 = template_result['Weighted chi angle error']
         tw2 = template_result['Twisted peptide bonds']
         ct2 = template_result['Peptide cis/trans flips']
         t_ca_distances = template_result['CA-CA distances']
-        t_bb_mean = template_result['Overall backbone angle error']
-        t_sc_mean = template_result['Overall weighted chi angle error']
+        t_bb_mean = numpy.nanmean(br2)
+        t_sc_mean = numpy.nanmean(sr2)
+        # t_bb_mean = template_result['Overall backbone angle error']
+        # t_sc_mean = template_result['Overall weighted chi angle error']
 
     else:
         res2 = br2 = sr2 = tw2 = ct2 = t_bb_mean = t_sc_mean = None
@@ -1734,7 +2069,7 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
 
     ca1_filled_vals = numpy.ones(len(res1_filled))*numpy.nan
     ca1_filled_points = numpy.ones(len(res1_filled))*numpy.nan
-    ca1_filled_points[mask] = -90
+    ca1_filled_points[mask] = -0.5
     ca1_filled_vals[mask] = m_ca_distances
 
     br1_filled = numpy.ones(len(res1_filled))*numpy.nan
@@ -1755,7 +2090,7 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
 
         ca2_filled_vals = numpy.ones(len(res2_filled))*numpy.nan
         ca2_filled_points = numpy.ones(len(res2_filled))*numpy.nan
-        ca2_filled_points[mask] = 90
+        ca2_filled_points[mask] = 0.5
         ca2_filled_vals[mask] = t_ca_distances
 
 
@@ -1812,8 +2147,9 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
     padding = 0.025*abs_x_range
     x_axis_limits = [abs_x_min-padding, abs_x_max+padding]
 
-    ax1.set_title("Backbone dihedral absolute error (template mean={}, model mean={:.2f})".format(template_backbone_mean, m_bb_mean))
-    ax1.set_ylabel("(|𝚫ω|+|𝚫φ|+|𝚫ψ|) / 3")
+    ax1.set_title("Backbone torsion penalty (template mean={}, model mean={:.2f})".format(template_backbone_mean, m_bb_mean))
+    # ax1.set_ylabel("(|𝚫ω|+|𝚫φ|+|𝚫ψ|) / 3")
+    ax1.set_ylabel("Backbone penalty")
     #ax1.set_ylabel("mean abs angle difference")
     if template_result is not None:
         ax1.plot(res2_filled, br2_filled, 'blue')
@@ -1823,12 +2159,12 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
 
     lines.append(mlines.Line2D([],[],color='red'))
     labels.append("Model")
-    ax1.set_ylim([0, 180])
+    ax1.set_ylim([0, 1])
     ax1.set_xlim(x_axis_limits)
-    ax1.text(min(res1_filled), 160, "Template twisted peptide bond fraction: {}".format(template_twisted_frac))
-    ax1.text(min(res1_filled), 130, "Model twisted peptide bond fraction: {:0.4f}".format(sum(tw1)/len(tw1)))
-    ax1.text(max(res1_filled), 160, "Template cis<->trans flips: {}".format(template_cis_trans), horizontalalignment='right')
-    ax1.text(max(res1_filled), 130, "Model cis<->trans flips: {}".format(sum(ct1)), horizontalalignment='right')
+    ax1.text(min(res1_filled), 0.889, "Template twisted peptide bond fraction: {}".format(template_twisted_frac))
+    ax1.text(min(res1_filled), 0.722, "Model twisted peptide bond fraction: {:0.4f}".format(sum(tw1)/len(tw1)))
+    ax1.text(max(res1_filled), 0.889, "Template cis<->trans flips: {}".format(template_cis_trans), horizontalalignment='right')
+    ax1.text(max(res1_filled), 0.722, "Model cis<->trans flips: {}".format(sum(ct1)), horizontalalignment='right')
 
 
 
@@ -1837,7 +2173,7 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
 
     colorbar_label_x = 0.89*(x_axis_limits[1]-x_axis_limits[0]) + x_axis_limits[0]
 
-    ax1_delta.set_title("Delta")
+    ax1_delta.set_title("Model score - Template score")
     if template_result is not None:
         t_pts = numpy.array([res2_filled, ca2_filled_points]).T.reshape(-1,1,2)
         t_segs = numpy.concatenate([t_pts[:-1], t_pts[1:]], axis=1)
@@ -1848,14 +2184,14 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
         t_lc.set_alpha(0.3)
         t_line = ax1_delta.add_collection(t_lc)
 
-        ax1_delta.text(colorbar_label_x, 130, "Template CA offset (Å)", horizontalalignment='right')
+        ax1_delta.text(colorbar_label_x, 0.7222, "Template CA offset (Å)", horizontalalignment='right')
         t_cbaxes = inset_axes(ax1_delta, width="10%", height="7.5%", loc='upper right')
         plt.colorbar(mappable=t_line, cax=t_cbaxes, orientation="horizontal", ticks=[0., 5])
 
 
         ax1_delta.plot(res_combined_filled, br1_combined_filled-br2_combined_filled, 'black')
-        ax1_delta.plot(res2_filled, tw2_filled.astype(float)*120, 'b^') # twisted in template
-        ax1_delta.plot(res2_filled, ct2_filled.astype(float)*100, 'bx') # cis<->trans between template and target
+        ax1_delta.plot(res2_filled, tw2_filled.astype(float)*0.667, 'b^') # twisted in template
+        ax1_delta.plot(res2_filled, ct2_filled.astype(float)*0.556, 'bx') # cis<->trans between template and target
 
     m_pts = numpy.array([res1_filled, ca1_filled_points]).T.reshape(-1,1,2)
     m_segs = numpy.concatenate([m_pts[:-1], m_pts[1:]], axis=1)
@@ -1866,7 +2202,8 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
     m_lc.set_alpha(0.3)
     m_line = ax1_delta.add_collection(m_lc)
 
-    ax1_delta.text(colorbar_label_x, -165, "Model CA offset (Å)", horizontalalignment='right')
+    ax1_delta.set_ylabel('Delta')
+    ax1_delta.text(colorbar_label_x, -0.9167, "Model CA offset (Å)", horizontalalignment='right')
     m_cbaxes = inset_axes(ax1_delta, width="10%", height="7.5%", loc='lower right')
     plt.colorbar(mappable=m_line, cax=m_cbaxes, orientation="horizontal", ticks=[0., 5])
 
@@ -1874,29 +2211,31 @@ def plot_comparison(name, model_name, model_result, template_name, template_resu
 
 
 
-    ax1_delta.plot(res1_filled, tw1_filled.astype(float)*-120, 'r^') # twisted in model
+    ax1_delta.plot(res1_filled, tw1_filled.astype(float)*-0.667, 'r^') # twisted in model
     lines.append(mlines.Line2D([],[],color='black', marker='^', linestyle='None'))
     labels.append("ω twisted >30° from plane")
-    ax1_delta.plot(res1_filled, ct1_filled.astype(float)*-100, 'rx') # cis<->trans between model and target
+    ax1_delta.plot(res1_filled, ct1_filled.astype(float)*-0.556, 'rx') # cis<->trans between model and target
     lines.append(mlines.Line2D([],[],color='black', marker='x', linestyle='None'))
     labels.append("ω cis ↔ trans")
-    ax1_delta.set_ylim([-180,180])
+    ax1_delta.set_ylim([-1,1])
     ax1_delta.set_xlim(x_axis_limits)
 
-    ax2.set_title("Weighted sidechain dihedral error (template mean={}, model mean={:.2f})".format(template_sidechain_mean, m_sc_mean))
-    ax2.set_ylabel("β𝚺(w|𝚫𝜒|) / 𝚺w")
+    ax2.set_title("Sidechain torsion penalty (template mean={}, model mean={:.2f})".format(template_sidechain_mean, m_sc_mean))
+    # ax2.set_ylabel("β𝚺(w|𝚫𝜒|) / 𝚺w")
+    ax2.set_ylabel('Sidechain penalty')
     # ax2.set_ylabel("mean abs angle difference")
     if template_result is not None:
         ax2.plot(res2_filled, sr2_filled, 'blue')
     ax2.plot(res1_filled, sr1_filled, 'red')
-    ax2.set_ylim([0,180])
+    ax2.set_ylim([0,1])
     ax2.set_xlim(x_axis_limits)
 
-    ax2_delta.set_title("Delta")
+    ax2_delta.set_title("Model score - Template score")
+    ax2_delta.set_ylabel("Delta")
     if template_result is not None:
         ax2_delta.plot(res_combined_filled, sr1_combined_filled-sr2_combined_filled, 'black')
         ax2_delta.set_xlim([res1_filled.min(), res1_filled.max()])
-    ax2_delta.set_ylim([-180,180])
+    ax2_delta.set_ylim([-1,1])
     ax2_delta.set_xlim(x_axis_limits)
 
     fig.legend(lines, labels, 'upper right')
@@ -1931,3 +2270,14 @@ def _find_suitable_fonts(chars):
         if not missing:
             fonts.append(font)
     return fonts
+
+def process_easy_targets(session, reprocess=False, start=0, end=None):
+    import os
+    if end is None or end > len(easy_targets):
+        end = len(easy_targets)
+    print('Easy targets: {}'.format(easy_targets))
+    process_directories(session, [os.path.join(_prediction_dir, d) for d in easy_targets[start:end]], reprocess=reprocess)
+
+def process_hard_targets(session, reprocess=False):
+    import os
+    process_directories(session, [os.path.join(_prediction_dir, d) for d in hard_targets], reprocess=reprocess)
